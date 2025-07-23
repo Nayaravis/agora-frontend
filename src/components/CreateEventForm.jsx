@@ -6,11 +6,13 @@ const CreateEventForm = ({ onCreateEvent }) => {
     date: '',
     time: '',
     location: '',
-    description: ''
+    description: '',
+    // Removed 'image: null' from initial state
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target; // Removed 'files' from destructuring
+    // Simplified logic as 'image' handling is removed
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
@@ -18,13 +20,14 @@ const CreateEventForm = ({ onCreateEvent }) => {
     e.preventDefault();
     console.log("Event Data:", formData);
     if (onCreateEvent) onCreateEvent(formData);
-    // Reset
+    // Reset form data without the image field
     setFormData({
       name: '',
       date: '',
       time: '',
       location: '',
-      description: ''
+      description: '',
+      // Removed 'image: null' from reset
     });
   };
 
@@ -103,26 +106,7 @@ const CreateEventForm = ({ onCreateEvent }) => {
         />
       </div>
 
-      {/* Upload Image */}
-      <div className="border-2 border-dashed border-gray-300 rounded-md p-6 text-center">
-        <p className="text-sm text-gray-500 mb-2">Upload Image or Logo</p>
-        <p className="text-xs text-gray-400 mb-4">Drag and drop or browse to upload an image or logo for your event.</p>
-        <input
-          type="file"
-          name="image"
-          accept="image/*"
-          onChange={handleChange}
-          className="hidden"
-          id="upload"
-        />
-        <label
-          htmlFor="upload"
-          className="inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded cursor-pointer"
-        >
-          Browse
-        </label>
-        {formData.image && <p className="mt-2 text-sm text-green-600">{formData.image.name}</p>}
-      </div>
+      {/* ⚠️ The entire "Upload Image" div has been removed from here ⚠️ */}
 
       {/* Submit Button */}
       <button
@@ -134,5 +118,5 @@ const CreateEventForm = ({ onCreateEvent }) => {
     </form>
   );
 };
-
+ 
 export default CreateEventForm;
