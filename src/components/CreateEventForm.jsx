@@ -34,7 +34,7 @@ const CreateEventForm = ({ onCreateEvent }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-xl mx-auto bg-white p-8 rounded-lg shadow space-y-6"
+      className="max-w-xl mx-auto bg-white p-8 rounded-lg shadow space-y-6 my-28"
     >
       <h2 className="text-2xl font-bold text-gray-800">Create Event</h2>
 

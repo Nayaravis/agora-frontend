@@ -5,7 +5,7 @@ function App() {
   return (
     <>
       <NavBar />
-      <div className="container mx-auto px-4 py-8">
+      <div className="py-10">
         <CreateEventForm />
       </div>
     </>
