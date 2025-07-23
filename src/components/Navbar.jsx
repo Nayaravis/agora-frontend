@@ -1,3 +1,5 @@
+import { Link, NavLink } from "react-router";
+
 function NavBar() {
     return (
         <nav className="fixed w-full h-16 border-b-2 border-b-[#f1f0f5] flex justify-between items-center px-9 bg-white">
@@ -19,9 +21,9 @@ function NavBar() {
                 <span>Agora</span>
             </div>
             <ul id="nav-links" className="flex gap-9 font-medium text-[#131217]">
-                <li className="p-1.5 cursor-pointer">Explore</li>
-                <li className="p-1.5 cursor-pointer">My Events</li>
-                <li className="p-1.5 cursor-pointer">Create</li>
+                <NavLink to={"/"} className="p-1.5 cursor-pointer">Explore</NavLink>
+                <NavLink to={"/"} className="p-1.5 cursor-pointer">My Events</NavLink>
+                <NavLink to={"/create"} className="p-1.5 cursor-pointer">Create</NavLink>
             </ul>
         </nav>
     )
