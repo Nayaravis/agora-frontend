@@ -1,6 +1,6 @@
 function NavBar() {
     return (
-        <nav className="fixed w-full h-16 border-b-2 border-b-[#f1f0f5] flex justify-between items-center px-9">
+        <nav className="fixed w-full h-16 border-b-2 border-b-[#f1f0f5] flex justify-between items-center px-9 bg-white">
             <div className="text-lg font-bold flex items-center gap-1.5">
                 <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="size-5">
                 <path

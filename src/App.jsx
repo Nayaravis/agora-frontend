@@ -5,7 +5,9 @@ function App() {
   return (
     <>
       <NavBar />
-      <CreateEventForm />
+      <div className="py-10">
+        <CreateEventForm />
+      </div>
     </>
   )
 }
