@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { motion } from "motion/react";
 import EventCard from "./EventCard";
 
 function EventsList() {
@@ -34,7 +35,7 @@ function EventsList() {
     }, [])
 
     return (
-        <div className="pt-17 px-20">
+        <motion.div className="pt-17 px-20" initial={{scale: 0}} animate={{scale: 1}}>
             <div className="text-[32px] font-bold py-5">
                 <span>Explore Events</span>
             </div>
@@ -46,7 +47,7 @@ function EventsList() {
                     return <EventCard key={event.id} title={event.title} location={event.location} date={event.datetime} id={event.id} cardColor={generateColor()}/>
                 })}
             </div>
-        </div>
+        </motion.div>
     )
 }
 
