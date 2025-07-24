@@ -55,7 +55,7 @@ textarea {
 
 .submit-button {
   padding: 10px 15px;
-  background-color: #4CAF50;
+  background-color: #346f8a;
   color: white;
   border: none;
   border-radius: 4px;
@@ -68,7 +68,7 @@ textarea {
 }
 
 .success-message {
-  color: #4CAF50;
+  color: #28752a;
   font-weight: bold;
   text-align: center;
   padding: 20px;
