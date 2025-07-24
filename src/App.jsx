@@ -4,7 +4,7 @@ import EventsList from "./components/EventListPage"
 import NavBar from "./components/Navbar"
 import UserAccountPage from "./components/UserAccountPage"
 import EventRSVP from "./components/rsvp"
-import axios from 'axios';
+import EventDetailPage from './components/EventDetailPage'
 
 function App() {
   return (
@@ -15,6 +15,7 @@ function App() {
           <Route path="/" element={<EventsList />} />
           <Route path="/create" element={<CreateEventForm />} />
           <Route path="/profile" element={<div className='w-full h-full flex justify-center items-center'><UserAccountPage /></div>} />
+          <Route path='/events/:eventId' element={<EventDetailPage />} />
           <Route path="/events/:eventId/rsvp" element={<EventRSVP />} />
         </Routes>
       </div>

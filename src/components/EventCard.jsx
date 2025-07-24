@@ -2,6 +2,16 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 function EventCard({ id, title, location, date, notes, createdBy, cardColor }) {
+    const formatDateTime = (datetime) => {
+    if (!datetime) return '';
+      const date = new Date(datetime);
+      return {
+        _date: date.toLocaleDateString(),
+        time: date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+    };
+
+    const { _date, time } = formatDateTime(date);
     return (
         <div className="w-72 cursor-pointer">
             <Link to={`/events/${id}`}>
@@ -12,9 +22,12 @@ function EventCard({ id, title, location, date, notes, createdBy, cardColor }) {
                 </motion.div>
                 <div className="py-3 px-3.5">
                     <p className="font-bold text-lg">{title}</p>
-                    <div className="flex justify-between text-gray-400 text-sm font-semibold">
+                    <div className="flex justify-between items-center text-gray-400 text-sm font-semibold">
                         <p>{location}</p>
-                        <p>{date}</p>
+                        <div className="h-fit">
+                            <p>{_date}</p>
+                            <p>{time}</p>
+                        </div>
                     </div>
                 </div>
             </Link>
