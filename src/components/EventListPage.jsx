@@ -22,16 +22,17 @@ function EventsList() {
       "bg-amber-400",
       "bg-orange-500"
     ];
-
-    function generateColor() {
-      const index = Math.floor(Math.random() * vibrantTailwindColors.length);
-      return vibrantTailwindColors[index];
-    }
     
     useEffect(() => {
         fetch("https://agora-backend-pg31.onrender.com/api/events")
             .then(r => r.json())
-            .then(e => updateEvents(e))
+            .then(e => {
+                const eventsWithColors = e.map(event => ({
+                    ...event,
+                    cardColor: vibrantTailwindColors[Math.floor(Math.random() * vibrantTailwindColors.length)]
+                }));
+                updateEvents(eventsWithColors);
+            })
     }, [])
 
     return (
@@ -44,7 +45,7 @@ function EventsList() {
             </div>
             <div className="py-6 flex gap-6">
                 {events.map(event => {
-                    return <EventCard key={event.id} title={event.title} location={event.location} date={event.datetime} id={event.id} cardColor={generateColor()}/>
+                    return <EventCard key={event.id} title={event.title} location={event.location} date={event.datetime} id={event.id} cardColor={event.cardColor}/>
                 })}
             </div>
         </motion.div>

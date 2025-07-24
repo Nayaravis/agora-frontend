@@ -1,57 +1,30 @@
-import React, { useState, useEffect } from 'react'; // Removed SyntheticEvent import as its type won't be used
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router';
 
-// Removed TypeScript type alias for RsvpStatus
-// export type RsvpStatus = 'attending' | 'not_attending' | 'not_responded';
+const EventDetailPage = () => {
+  let params = useParams();
+  const [event, updateEvent] = useState({});
 
-// Removed TypeScript interface for Comment
-// interface Comment {
-//   id: string;
-//   userName: string;
-//   timeAgo: string;
-//   text: string;
-//   avatarUrl: string;
-// }
+  useEffect(() => {
+    fetch(`https://agora-backend-pg31.onrender.com/api/events/${params.eventId}`)
+      .then(res => res.json())
+      .then(eventData => {
+        updateEvent(eventData)
+      })
+  }, [params.eventId])
+  
+  const initialComments = [];
 
-// Removed TypeScript interface for EventDetailProps
-// interface EventDetailProps {
-//   eventName: string;
-//   host: string;
-//   date: string;
-//   timeRange: string;
-//   location: string;
-//   description: string;
-//   imageUrl?: string;
-//   initialRsvpStatus: RsvpStatus;
-//   onRsvpChange?: (eventId: string, status: RsvpStatus) => void;
-//   eventId: string;
-//   comments: Comment[];
-// }
+  const { title, createdBy, datetime, location, notes, imageUrl, initialRsvpStatus, onRsvpChange, eventId } = event;
 
-// Changed to a standard JavaScript functional component, no React.FC annotation
-const EventDetailPage = ({
-  eventName,
-  host,
-  date,
-  timeRange,
-  location,
-  description,
-  imageUrl,
-  initialRsvpStatus,
-  onRsvpChange,
-  eventId,
-  comments: initialComments = [], 
-}) => {
-  // Removed type annotations from useState calls
   const [rsvpStatus, setRsvpStatus] = useState(initialRsvpStatus);
   const [newCommentText, setNewCommentText] = useState('');
-  
   const [comments, setComments] = useState(initialComments); 
 
   useEffect(() => {
     setRsvpStatus(initialRsvpStatus);
   }, [initialRsvpStatus]);
 
-  // Removed type annotation for 'status' parameter
   const handleRsvpClick = (status) => { 
     setRsvpStatus(status);
     if (onRsvpChange) {
@@ -61,20 +34,18 @@ const EventDetailPage = ({
 
   const handlePostComment = () => {
     if (newCommentText.trim()) {
-      // Defined newComment as a plain JavaScript object, no Comment interface
       const newComment = { 
         id: Date.now().toString(), 
         userName: "Current User", 
         timeAgo: "Just now",
         text: newCommentText.trim(),
-        avatarUrl: "https://via.placeholder.com/40/FF5733/FFFFFF?text=CU" // Placeholder
+        avatarUrl: "https://via.placeholder.com/40/FF5733/FFFFFF?text=CU"
       };
       setComments((prevComments) => [...prevComments, newComment]);
       setNewCommentText('');
     }
   };
 
-  // Removed type annotation for 'buttonStatus' parameter
   const getRsvpButtonClasses = (buttonStatus) => { 
     let baseClasses = "py-2 px-6 rounded-full font-semibold transition duration-300 ease-in-out shadow-md";
     if (rsvpStatus === buttonStatus) {
@@ -84,7 +55,6 @@ const EventDetailPage = ({
     }
   };
 
-  // Removed type annotation for React.ReactNode
   const getRsvpStatusText = () => { 
     switch (rsvpStatus) {
       case 'attending':
@@ -96,129 +66,176 @@ const EventDetailPage = ({
     }
   };
 
+  const formatDateTime = (datetime) => {
+    if (!datetime) return '';
+    const date = new Date(datetime);
+    return {
+      date: date.toLocaleDateString(),
+      time: date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+  };
+
+  const { date, time } = formatDateTime(datetime);
+
   return (
-    <div className="min-h-screen bg-gray-100 font-sans antialiased flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="bg-white rounded-xl shadow-2xl overflow-hidden max-w-4xl w-full mx-auto transform hover:scale-105 transition-transform duration-300">
+    <div className="min-h-screen bg-gray-50 overflow-auto flex w-full justify-center">
+      <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         {/* Breadcrumbs */}
-        <div className="p-6 sm:p-8 pb-0">
-          <p className="text-sm text-gray-500 mb-2">Events / Tech Meetup</p>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight mb-2">
-            {eventName}
-          </h1>
-          <p className="text-gray-600 text-lg">Hosted by {host}</p>
-        </div>
+        <nav className="mb-6">
+          <p className="text-sm text-gray-500">Events / {title || 'Loading...'}</p>
+        </nav>
 
-        {/* Event Image/Placeholder */}
-        <div className="relative h-64 sm:h-80 bg-teal-500 flex items-center justify-center overflow-hidden mt-6">
-          {imageUrl && ( 
-            <img
-              src={imageUrl}
-              alt={eventName}
-              className="w-full h-full object-cover object-center"
-              onError={(e) => { // Removed SyntheticEvent type annotation and 'as HTMLImageElement' assertion
-                const target = e.target; 
-                target.onerror = null;
-                target.src = `https://placehold.co/800x450/E0E0E0/333333?text=Event+Image`;
-              }}
-            />
-          )}
-          
-          <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-30"></div>
-        </div>
-
-        <div className="p-6 sm:p-8 space-y-6">
-          {/* Details Section */}
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Details</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-lg text-gray-700">
-              <div className="flex items-center">
-                <span className="font-semibold text-gray-600 mr-2">📅 Date:</span> {date}
-              </div>
-              <div className="flex items-center">
-                <span className="font-semibold text-gray-600 mr-2">⏰ Time:</span> {timeRange}
-              </div>
-              <div className="flex items-center col-span-1 md:col-span-2">
-                <span className="font-semibold text-gray-600 mr-2">📍 Location:</span> {location}
-              </div>
-            </div>
-          </div>
-
-          {/* Description Section */}
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Description</h2>
-            <p className="text-gray-700 leading-relaxed">
-              {description}
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          {/* Header */}
+          <div className="p-6 sm:p-8">
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+              {title || 'Loading...'}
+            </h1>
+            <p className="text-gray-600 text-lg">
+              Hosted by {createdBy || 'Unknown'}
             </p>
           </div>
 
-          {/* RSVP Section */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-lg font-medium text-gray-800">
-              RSVP Status: {getRsvpStatusText()}
-            </div>
-            <div className="flex space-x-4">
-              <button
-                onClick={() => handleRsvpClick('attending')}
-                className={getRsvpButtonClasses('attending')}
-              >
-                Attend
-              </button>
-              <button
-                onClick={() => handleRsvpClick('not_attending')}
-                className={getRsvpButtonClasses('not_attending')}
-              >
-                Not Attending
-              </button>
-            </div>
+          {/* Event Image */}
+          <div className="relative h-64 sm:h-80 bg-gradient-to-br from-purple-500 to-pink-500">
+            {imageUrl ? (
+              <img
+                src={imageUrl}
+                alt={title}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="text-white text-xl font-semibold">Event Image</div>
+              </div>
+            )}
           </div>
 
-          {/* Comments & Questions Section */}
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Comments & Questions</h2>
-            <div className="space-y-4">
-              {comments.length > 0 ? (
-                comments.map((comment) => (
-                  <div key={comment.id} className="flex items-start space-x-3">
-                    <img
-                      src={comment.avatarUrl}
-                      alt={`${comment.userName}'s avatar`}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                    <div className="flex-1">
-                      <div className="flex items-baseline space-x-2">
-                        <p className="font-semibold text-gray-900">{comment.userName}</p>
-                        <p className="text-sm text-gray-500">{comment.timeAgo}</p>
-                      </div>
-                      <p className="text-gray-700">{comment.text}</p>
-                    </div>
+          {/* Content */}
+          <div className="p-6 sm:p-8 space-y-8">
+            {/* Event Details */}
+            <section>
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">Event Details</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex items-start space-x-3">
+                  <span className="text-2xl">📅</span>
+                  <div>
+                    <p className="font-semibold text-gray-800">Date</p>
+                    <p className="text-gray-600">{date || 'TBD'}</p>
                   </div>
-                ))
-              ) : (
-                <p className="text-gray-500">No comments yet. Be the first to ask a question!</p>
-              )}
-            </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <span className="text-2xl">⏰</span>
+                  <div>
+                    <p className="font-semibold text-gray-800">Time</p>
+                    <p className="text-gray-600">{time || 'TBD'}</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3 md:col-span-2">
+                  <span className="text-2xl">📍</span>
+                  <div>
+                    <p className="font-semibold text-gray-800">Location</p>
+                    <p className="text-gray-600">{location || 'TBD'}</p>
+                  </div>
+                </div>
+              </div>
+            </section>
 
-            {/* Add a comment input */}
-            <div className="mt-6 flex items-center space-x-3">
-              <img
-                src="https://via.placeholder.com/40/D3D3D3/000000?text=You" // Placeholder for current user's avatar
-                alt="Your avatar"
-                className="w-10 h-10 rounded-full object-cover"
-              />
-              <input
-                type="text"
-                value={newCommentText}
-                onChange={(e) => setNewCommentText(e.target.value)}
-                placeholder="Add a comment or question..."
-                className="flex-1 p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
-              <button
-                onClick={handlePostComment}
-                className="bg-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-purple-700 transition duration-300"
-              >
-                Post
-              </button>
-            </div>
+            {/* Description */}
+            <section>
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">Description</h2>
+              <div className="prose max-w-none">
+                <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                  {notes || 'No description available.'}
+                </p>
+              </div>
+            </section>
+
+            {/* RSVP Section */}
+            <section className="bg-gray-50 rounded-lg p-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">RSVP Status</h3>
+                  {getRsvpStatusText()}
+                </div>
+                <div className="flex space-x-3">
+                  <button
+                    onClick={() => handleRsvpClick('attending')}
+                    className={getRsvpButtonClasses('attending')}
+                  >
+                    ✓ Attending
+                  </button>
+                  <button
+                    onClick={() => handleRsvpClick('not_attending')}
+                    className={getRsvpButtonClasses('not_attending')}
+                  >
+                    ✗ Not Attending
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            {/* Comments Section */}
+            <section>
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">Comments & Questions</h2>
+              
+              {/* Comments List */}
+              <div className="space-y-6 mb-8">
+                {comments.length > 0 ? (
+                  comments.map((comment) => (
+                    <div key={comment.id} className="flex space-x-4">
+                      <img
+                        src={comment.avatarUrl}
+                        alt={`${comment.userName}'s avatar`}
+                        className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-baseline space-x-2 mb-1">
+                          <p className="font-semibold text-gray-900">{comment.userName}</p>
+                          <p className="text-sm text-gray-500">{comment.timeAgo}</p>
+                        </div>
+                        <p className="text-gray-700 break-words">{comment.text}</p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500 text-lg">No comments yet.</p>
+                    <p className="text-gray-400">Be the first to ask a question!</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Add Comment */}
+              <div className="border-t pt-6">
+                <div className="flex space-x-4">
+                  <img
+                    src="https://via.placeholder.com/40/D3D3D3/000000?text=You"
+                    alt="Your avatar"
+                    className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                  />
+                  <div className="flex-1 flex space-x-3">
+                    <input
+                      type="text"
+                      value={newCommentText}
+                      onChange={(e) => setNewCommentText(e.target.value)}
+                      placeholder="Add a comment or question..."
+                      className="flex-1 p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      onKeyPress={(e) => e.key === 'Enter' && handlePostComment()}
+                    />
+                    <button
+                      onClick={handlePostComment}
+                      className="bg-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-purple-700 transition duration-300 flex-shrink-0"
+                    >
+                      Post
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
         </div>
       </div>
