@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'motion/react';
 
 const CreateEventForm = ({ onCreateEvent }) => {
   const [formData, setFormData] = useState({
@@ -32,10 +33,10 @@ const CreateEventForm = ({ onCreateEvent }) => {
   };
 
   return (
-    <div className='w-full flex justify-center h-fit'>
+    <motion.div className='w-full flex justify-center h-full py-8' initial={{scale: 0}} animate={{scale: 1}}>
       <form
         onSubmit={handleSubmit}
-        className="w-3xl bg-white p-8 rounded-lg shadow space-y-6"
+        className="w-3xl bg-white p-8 rounded-lg shadow space-y-6 overflow-x-auto"
       >
         <h2 className="text-2xl font-bold text-gray-800">Create Event</h2>
 
@@ -117,7 +118,7 @@ const CreateEventForm = ({ onCreateEvent }) => {
           Create Event
         </button>
       </form>
-    </div>
+    </motion.div>
   );
 };
  

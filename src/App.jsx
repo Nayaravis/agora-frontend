@@ -9,11 +9,11 @@ function App() {
   return (
     <Router>
       <NavBar />
-      <div className="py-28 h-screen flex">
+      <div className="pt-10 h-screen flex overflow-hidden">
         <Routes>
-        <Route path="/" element={<EventsList />} />
-        <Route path="/create" element={<CreateEventForm />} />
-        <Route path="/profile" element={<UserAccountPage />} />
+          <Route path="/" element={<EventsList />} />
+          <Route path="/create" element={<CreateEventForm />} />
+          <Route path="/profile" element={<div className='w-full h-full flex justify-center items-center'><UserAccountPage /></div>} />
         </Routes>
       </div>
     </Router>
