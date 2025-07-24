@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import CreateEventForm from "./components/CreateEventForm"
 import EventsList from "./components/EventListPage"
 import NavBar from "./components/Navbar"
