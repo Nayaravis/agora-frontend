@@ -24,6 +24,11 @@ function NavBar() {
                 <NavLink to={"/"} className="p-1.5 cursor-pointer">Explore</NavLink>
                 <NavLink to={"/"} className="p-1.5 cursor-pointer">My Events</NavLink>
                 <NavLink to={"/create"} className="p-1.5 cursor-pointer">Create</NavLink>
+                <NavLink to="/profile" className={({isActive}) => 
+                  `p-1.5 cursor-pointer ${isActive ? "text-blue-500" : ""}`
+                }>
+                  Profile
+                </NavLink>
             </ul>
         </nav>
     )
