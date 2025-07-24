@@ -22,6 +22,8 @@ const UserAccountPage = () => {
     avatar: '', 
   });
 
+  const upcomingEvents = [];
+  const pastEvents = [];
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -32,7 +34,7 @@ const UserAccountPage = () => {
   };
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px', width: "100vh" }}>
       <Card style={{ padding: '20px', textAlign: 'center' }}>
         <StyledAvatar src={user.avatar} alt={user.name}>
           {!user.avatar && user.name.charAt(0)}
