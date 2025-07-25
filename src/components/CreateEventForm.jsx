@@ -27,6 +27,15 @@ const CreateEventForm = ({ onCreateEvent }) => {
     setError(null);
 
     try {
+      // Get the organization name from localStorage
+      const createdBy = localStorage.getItem("organizationName");
+      if (!createdBy) {
+        setError("Organization name not found. Please set it on the home page.");
+        setSubmitting(false);
+        return;
+      }
+
+      // Convert datetime-local to ISO
       const datetime = new Date(formData.datetimeLocal).toISOString();
 
       const payload = {
@@ -34,6 +43,7 @@ const CreateEventForm = ({ onCreateEvent }) => {
         location: formData.location,
         datetime,
         notes: formData.notes,
+        createdBy,
         invitees: [],
       };
 
@@ -80,57 +90,59 @@ const CreateEventForm = ({ onCreateEvent }) => {
       >
         <h2 className="text-2xl font-bold text-gray-800">Create Event</h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="md:col-span-2">
-            <label className="block text-sm text-gray-700">Event Name</label>
-            <input
-              type="text"
-              name="title"
-              placeholder="Enter event name"
-              value={formData.title}
-              onChange={handleChange}
-              required
-              className="mt-1 w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+        {/* Event Name */}
+        <div>
+          <label className="block text-sm text-gray-700">Event Name</label>
+          <input
+            type="text"
+            name="title"
+            placeholder="Enter event name"
+            value={formData.title}
+            onChange={handleChange}
+            required
+            className="mt-1 w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
 
-          <div>
-            <label className="block text-sm text-gray-700">Date & Time</label>
-            <input
-              type="datetime-local"
-              name="datetimeLocal"
-              value={formData.datetimeLocal}
-              onChange={handleChange}
-              required
-              className="mt-1 w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+        {/* Date & Time */}
+        <div>
+          <label className="block text-sm text-gray-700">Date & Time</label>
+          <input
+            type="datetime-local"
+            name="datetimeLocal"
+            value={formData.datetimeLocal}
+            onChange={handleChange}
+            required
+            className="mt-1 w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
 
-          <div>
-            <label className="block text-sm text-gray-700">Location</label>
-            <input
-              type="text"
-              name="location"
-              placeholder="Enter location"
-              value={formData.location}
-              onChange={handleChange}
-              required
-              className="mt-1 w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+        {/* Location */}
+        <div>
+          <label className="block text-sm text-gray-700">Location</label>
+          <input
+            type="text"
+            name="location"
+            placeholder="Enter location"
+            value={formData.location}
+            onChange={handleChange}
+            required
+            className="mt-1 w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
 
-          <div className="md:col-span-2">
-            <label className="block text-sm text-gray-700">Notes</label>
-            <textarea
-              name="notes"
-              placeholder="Enter event notes"
-              value={formData.notes}
-              onChange={handleChange}
-              rows={4}
-              required
-              className="mt-1 w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+        {/* Notes */}
+        <div>
+          <label className="block text-sm text-gray-700">Notes</label>
+          <textarea
+            name="notes"
+            placeholder="Enter event notes"
+            value={formData.notes}
+            onChange={handleChange}
+            rows={4}
+            required
+            className="mt-1 w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
         </div>
 
         {error && (
